@@ -20,6 +20,9 @@
           <el-button type="primary" @click="getMd" class="mdbtn"
             >复制MarkDown</el-button
           >
+           <el-button type="primary" @click="downloadMd" class="downloadbtn"
+            >下载MarkDown</el-button
+          >
         </div>
       </el-drawer>
     </div>
@@ -31,6 +34,7 @@ import Editor from "@toast-ui/editor";
 import Clipboard from "clipboard";
 import hljs from "highlight.js";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
+import downloadBlobAsFile from "../utils/download";
 
 import "highlight.js/styles/github.css"; //https://github.com/highlightjs/highlight.js/tree/master/src/styles
 import "codemirror/lib/codemirror.css"; // Editor's Dependency Style
@@ -67,17 +71,24 @@ export default {
       const clipboard = new Clipboard(".mdbtn", {
         text: () => this.editor.getMarkdown(),
       });
-      clipboard.on("success", (e) => {
+      clipboard.on("success", () => {
         this.$message({
           message: "复制成功",
           type: "success",
         });
         clipboard.destroy();
       });
-      clipboard.on("error", (e) => {
+      clipboard.on("error", () => {
         this.$message.error("复制失败");
         clipboard.destroy();
       });
+    },
+    downloadMd() {
+      if (this.editor.getMarkdown().trim()) {
+        downloadBlobAsFile(this.editor.getMarkdown(), "unnamed.md");
+      } else {
+        this.$message.error("下载失败");
+      }
     },
   },
   mounted() {
