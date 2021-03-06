@@ -1,10 +1,27 @@
 <template>
   <div class="main">
     <div class="tools">
-      <el-button type="primary" @click="getHtml" class="htmlbtn" size="mini"
-        >复制HTML</el-button
+      <el-button
+        icon="el-icon-more"
+        size="mini"
+        @click="drawer = true"
+      ></el-button>
+      <el-drawer
+        :visible.sync="drawer"
+        :direction="direction"
+        :with-header="false"
+        :modal="false"
+        :size="'10%'"
       >
-      <el-button type="primary" @click="getMd" class="mdbtn" size="mini">复制MarkDown</el-button>
+        <div class="tool-innter">
+          <el-button type="primary" @click="getHtml" class="htmlbtn"
+            >复制HTML</el-button
+          >
+          <el-button type="primary" @click="getMd" class="mdbtn"
+            >复制MarkDown</el-button
+          >
+        </div>
+      </el-drawer>
     </div>
     <div id="editor"></div>
   </div>
@@ -25,6 +42,8 @@ export default {
     return {
       editor: null,
       htmlVnode: "",
+      drawer: false,
+      direction: "btt",
     };
   },
   methods: {
@@ -32,14 +51,14 @@ export default {
       const clipboard = new Clipboard(".htmlbtn", {
         target: () => this.editor.preview.el,
       });
-      clipboard.on("success", (e) => {
+      clipboard.on("success", () => {
         this.$message({
           message: "复制成功",
           type: "success",
         });
         clipboard.destroy();
       });
-      clipboard.on("error", (e) => {
+      clipboard.on("error", () => {
         this.$message.error("复制失败");
         clipboard.destroy();
       });
@@ -134,5 +153,8 @@ export default {
   z-index: 1000;
   display: flex;
   align-items: center;
+}
+.tool-innter {
+  padding: 25px;
 }
 </style>
