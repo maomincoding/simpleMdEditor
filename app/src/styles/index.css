@@ -1,0 +1,26 @@
+.tui-editor-contents p {
+    color: #4a4a4a;
+    font-size: 16px;
+    line-height: 31px;
+}
+#editor {
+    box-sizing: content-box;
+}
+.main {
+    position: relative;
+}
+.tools {
+    position: absolute;
+    right: 25px;
+    top: 0;
+    height: 31px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+}
+.tool-innter {
+    padding: 25px;
+}
+.tool-innter button{
+    margin: 0 10px 20px 0;
+}

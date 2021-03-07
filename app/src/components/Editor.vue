@@ -2,29 +2,30 @@
   <div class="main">
     <div class="tools">
       <el-button
-        icon="el-icon-more"
-        size="mini"
-        @click="drawer = true"
-      ></el-button>
-      <el-drawer
-        :visible.sync="drawer"
-        :direction="direction"
-        :with-header="false"
-        :modal="false"
-        :size="'10%'"
+          size="mini"
+          type="primary"
+          @click="drawer = true"
+      >实用工具</el-button>
+      <el-dialog
+          :title="'实用工具'"
+          :visible.sync="drawer"
+          :append-to-body="true"
       >
         <div class="tool-innter">
           <el-button type="primary" @click="getHtml" class="htmlbtn"
-            >复制HTML</el-button
+          >复制HTML
+          </el-button
           >
           <el-button type="primary" @click="getMd" class="mdbtn"
-            >复制MarkDown</el-button
+          >复制MarkDown
+          </el-button
           >
-           <el-button type="primary" @click="downloadMd" class="downloadbtn"
-            >下载MarkDown</el-button
+          <el-button type="primary" @click="downloadMd" class="downloadbtn"
+          >下载MarkDown
+          </el-button
           >
         </div>
-      </el-drawer>
+      </el-dialog>
     </div>
     <div id="editor"></div>
   </div>
@@ -34,20 +35,19 @@ import Editor from "@toast-ui/editor";
 import Clipboard from "clipboard";
 import hljs from "highlight.js";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
+import '@toast-ui/editor/dist/i18n/zh-cn.js';
 import downloadBlobAsFile from "../utils/download";
 
 import "highlight.js/styles/github.css"; //https://github.com/highlightjs/highlight.js/tree/master/src/styles
 import "codemirror/lib/codemirror.css"; // Editor's Dependency Style
 import "@toast-ui/editor/dist/toastui-editor.css"; // Editor's Style
-
+import "@/styles/index.css";
 export default {
   components: {},
   data() {
     return {
       editor: null,
-      htmlVnode: "",
-      drawer: false,
-      direction: "btt",
+      drawer: false
     };
   },
   methods: {
@@ -94,13 +94,14 @@ export default {
   mounted() {
     this.editor = new Editor({
       el: document.getElementById("editor"),
-      plugins: [[codeSyntaxHighlight, { hljs }]],
+      plugins: [[codeSyntaxHighlight, {hljs}]],
       previewStyle: "vertical",
       height: "100vh",
       initialEditType: "markdown",
       minHeight: "200px",
       initialValue: "",
-      placeholder: "Please enter text.",
+      placeholder: "你想写点什么...",
+      language:'zh-CN',
       useCommandShortcut: true,
       useDefaultHTMLSanitizer: true,
       usageStatistics: false,
@@ -133,39 +134,59 @@ export default {
   },
 };
 </script>
-
 <style scoped>
+::v-deep ul li {
+  list-style-type: disc !important;
+}
+
+::v-deep ol li {
+  list-style-type: decimal !important;
+}
+
+::v-deep ul li::before, ::v-deep ol li::before {
+  content: none;
+}
+::v-deep .tui-editor-contents h5{
+  margin-top: 20px;
+}
+::v-deep .tui-editor-contents h4{
+  margin: 30px 0 15px 0;
+}
+::v-deep .tui-editor-contents h3{
+  margin-top: 35px;
+}
+::v-deep .tui-editor-contents img{
+  margin: 10px 0;
+}
+::v-deep .tui-editor-contents h2{
+  margin-top: 40px;
+}
+::v-deep .tui-editor-contents h1{
+  margin-bottom: 30px;
+}
+::v-deep .tui-editor-contents p>code{
+  background-color: #fff5f5;
+  color: #ff502c;
+}
+::v-deep .tui-editor-contents pre {
+  width: 100%;
+  overflow: auto;
+}
+
+::v-deep .tui-editor-contents pre code {
+  white-space: inherit;
+}
+
 ::v-deep .tui-editor-defaultUI {
   border: 0;
 }
+
 ::v-deep te-toolbar-section {
   position: fixed;
   top: 0;
 }
+
 ::v-deep .tui-editor-defaultUI .te-mode-switch-section {
   display: none !important;
-}
-.tui-editor-contents p {
-  color: #4a4a4a;
-  font-size: 16px;
-  line-height: 31px;
-}
-#editor {
-  box-sizing: content-box;
-}
-.main {
-  position: relative;
-}
-.tools {
-  position: absolute;
-  right: 25px;
-  top: 0;
-  height: 31px;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-}
-.tool-innter {
-  padding: 25px;
 }
 </style>
