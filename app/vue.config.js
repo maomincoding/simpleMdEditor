@@ -5,7 +5,7 @@ function resolve(dir) {
   return path.join(__dirname, dir);
 }
 
-const name = "简·MarkDown编辑器" // page title
+const name = "Simple·MarkDown编辑器" // page title
 const port = process.env.port || process.env.npm_config_port || 6061 // dev port
 
 module.exports = {

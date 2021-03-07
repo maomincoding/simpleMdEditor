@@ -24,3 +24,13 @@
 .tool-innter button{
     margin: 0 10px 20px 0;
 }
+.functionList li{
+    line-height: 32px;
+}
+.wxcode {
+    display: flex;
+    justify-content: center;
+}
+.wxcode img{
+    width: 50%;
+}

@@ -5,9 +5,14 @@
           size="mini"
           type="primary"
           @click="drawer = true"
-      >实用工具</el-button>
+      >工具</el-button>
+      <el-button
+          size="mini"
+          type="primary"
+          @click="aboutView = true"
+      >关于</el-button>
       <el-dialog
-          :title="'实用工具'"
+          :title="'工具'"
           :visible.sync="drawer"
           :append-to-body="true"
       >
@@ -24,6 +29,25 @@
           >下载MarkDown
           </el-button
           >
+        </div>
+      </el-dialog>
+      <el-dialog
+          :title="'关于'"
+          :visible.sync="aboutView"
+          :append-to-body="true"
+      >
+        <h3>Simple·MarkDown编辑器</h3>
+        <ul class="functionList">
+          <li v-for="(item,index) in functionList" :key="index">
+            {{item}}
+          </li>
+        </ul>
+        <h3>作者</h3>
+        <ul class="functionList">
+          <li v-for="(item,index) in authorList" :key="index">{{item}}</li>
+        </ul>
+        <div class="wxcode">
+          <img src="../assets/wxcode.jpeg" alt="">
         </div>
       </el-dialog>
     </div>
@@ -47,7 +71,10 @@ export default {
   data() {
     return {
       editor: null,
-      drawer: false
+      drawer: false,
+      aboutView: false,
+      functionList:['页面简约','功能实用','支持稀土掘金、CSDN、微信公众号、知乎','可复制HTML、MarkDown','可下载MarkDown文件'],
+      authorList:['作者：Vam的金豆之路','欢迎关注我的公众号：前端历劫之路','我创建了一个技术交流、文章分享群，群里有很多大厂的前端大佬，关注公众号后，点击下方菜单了解更多即可加我微信，期待你的加入']
     };
   },
   methods: {
