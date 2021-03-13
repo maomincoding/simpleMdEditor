@@ -1,53 +1,42 @@
 <template>
   <div class="main">
     <div class="tools">
-      <el-button
-          size="mini"
-          type="primary"
-          @click="drawer = true"
-      >工具</el-button>
-      <el-button
-          size="mini"
-          type="primary"
-          @click="aboutView = true"
-      >关于</el-button>
-      <el-dialog
-          :title="'工具'"
-          :visible.sync="drawer"
-          :append-to-body="true"
+      <el-button size="mini" type="primary" @click="drawer = true"
+        >工具</el-button
       >
+      <el-button size="mini" type="primary" @click="aboutView = true"
+        >关于</el-button
+      >
+      <el-dialog :title="'工具'" :visible.sync="drawer" :append-to-body="true">
         <div class="tool-innter">
           <el-button type="primary" @click="getHtml" class="htmlbtn"
-          >复制HTML
-          </el-button
-          >
+            >复制HTML
+          </el-button>
           <el-button type="primary" @click="getMd" class="mdbtn"
-          >复制MarkDown
-          </el-button
-          >
+            >复制MarkDown
+          </el-button>
           <el-button type="primary" @click="downloadMd" class="downloadbtn"
-          >下载MarkDown
-          </el-button
-          >
+            >下载MarkDown
+          </el-button>
         </div>
       </el-dialog>
       <el-dialog
-          :title="'关于'"
-          :visible.sync="aboutView"
-          :append-to-body="true"
+        :title="'关于'"
+        :visible.sync="aboutView"
+        :append-to-body="true"
       >
         <h3>Simple·MarkDown编辑器</h3>
         <ul class="functionList">
-          <li v-for="(item,index) in functionList" :key="index">
-            {{item}}
+          <li v-for="(item, index) in functionList" :key="index">
+            {{ item }}
           </li>
         </ul>
         <h3>作者</h3>
         <ul class="functionList">
-          <li v-for="(item,index) in authorList" :key="index">{{item}}</li>
+          <li v-for="(item, index) in authorList" :key="index">{{ item }}</li>
         </ul>
         <div class="wxcode">
-          <img src="../assets/wxcode.jpeg" alt="">
+          <img src="../assets/wxcode.jpeg" alt="" />
         </div>
       </el-dialog>
     </div>
@@ -59,7 +48,7 @@ import Editor from "@toast-ui/editor";
 import Clipboard from "clipboard";
 import hljs from "highlight.js";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
-import '@toast-ui/editor/dist/i18n/zh-cn.js';
+import "@toast-ui/editor/dist/i18n/zh-cn.js";
 import downloadBlobAsFile from "../utils/download";
 
 import "highlight.js/styles/github.css"; //https://github.com/highlightjs/highlight.js/tree/master/src/styles
@@ -73,8 +62,19 @@ export default {
       editor: null,
       drawer: false,
       aboutView: false,
-      functionList:['页面简约','功能实用','支持稀土掘金、CSDN、微信公众号、知乎','可复制HTML、MarkDown','可下载MarkDown文件'],
-      authorList:['作者：Vam的金豆之路','欢迎关注我的公众号：前端历劫之路','我创建了一个技术交流、文章分享群，群里有很多大厂的前端大佬，关注公众号后，点击下方菜单了解更多即可加我微信，期待你的加入']
+      initTxt: "",
+      functionList: [
+        "页面简约",
+        "功能实用",
+        "支持稀土掘金、CSDN、微信公众号、知乎",
+        "可复制HTML、MarkDown",
+        "可下载MarkDown文件",
+      ],
+      authorList: [
+        "作者：Vam的金豆之路",
+        "欢迎关注我的公众号：前端历劫之路",
+        "我创建了一个技术交流、文章分享群，群里有很多大厂的前端大佬，关注公众号后，点击下方菜单了解更多即可加我微信，期待你的加入",
+      ],
     };
   },
   methods: {
@@ -117,23 +117,52 @@ export default {
         this.$message.error("下载失败");
       }
     },
+    useChange() {
+      if (window.localStorage) {
+        localStorage.setItem("md", this.editor.getMarkdown());
+      }
+    },
+    getLocalSize() {
+      console.log(window.localStorage)
+      if (!window.localStorage) {
+        console.log("浏览器不支持localStorage");
+      }
+      var size = 0;
+      for (item in window.localStorage) {
+        if (window.localStorage.hasOwnProperty(item)) {
+          size += window.localStorage.getItem(item).length;
+        }
+      }
+      console.log(
+        "当前localStorage剩余容量为" + (size / 1024).toFixed(2) + "KB"
+      );
+    },
+  },
+  created() {
+    this.getLocalSize();
+    if (window.localStorage && localStorage.getItem("md")) {
+      this.initTxt = localStorage.getItem("md");
+    }
   },
   mounted() {
     this.editor = new Editor({
       el: document.getElementById("editor"),
-      plugins: [[codeSyntaxHighlight, {hljs}]],
+      plugins: [[codeSyntaxHighlight, { hljs }]],
       previewStyle: "vertical",
       height: "100vh",
       initialEditType: "markdown",
       minHeight: "200px",
-      initialValue: "",
+      initialValue: this.initTxt,
       placeholder: "你想写点什么...",
-      language:'zh-CN',
+      language: "zh-CN",
       useCommandShortcut: true,
       useDefaultHTMLSanitizer: true,
       usageStatistics: false,
       hideModeSwitch: false,
       viewer: true,
+      events: {
+        change: this.useChange,
+      },
       toolbarItems: [
         "heading",
         "bold",
@@ -170,28 +199,29 @@ export default {
   list-style-type: decimal !important;
 }
 
-::v-deep ul li::before, ::v-deep ol li::before {
+::v-deep ul li::before,
+::v-deep ol li::before {
   content: none;
 }
-::v-deep .tui-editor-contents h5{
+::v-deep .tui-editor-contents h5 {
   margin-top: 20px;
 }
-::v-deep .tui-editor-contents h4{
+::v-deep .tui-editor-contents h4 {
   margin: 30px 0 15px 0;
 }
-::v-deep .tui-editor-contents h3{
+::v-deep .tui-editor-contents h3 {
   margin-top: 35px;
 }
-::v-deep .tui-editor-contents img{
+::v-deep .tui-editor-contents img {
   margin: 10px 0;
 }
-::v-deep .tui-editor-contents h2{
+::v-deep .tui-editor-contents h2 {
   margin-top: 40px;
 }
-::v-deep .tui-editor-contents h1{
+::v-deep .tui-editor-contents h1 {
   margin-bottom: 30px;
 }
-::v-deep .tui-editor-contents p>code{
+::v-deep .tui-editor-contents p > code {
   background-color: #fff5f5;
   color: #ff502c;
 }
