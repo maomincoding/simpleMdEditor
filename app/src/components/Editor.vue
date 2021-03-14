@@ -9,6 +9,9 @@
       >
       <el-dialog :title="'工具'" :visible.sync="drawer" :append-to-body="true">
         <div class="tool-innter">
+          <el-button type="primary" @click="resetInnter" class="htmlbtn"
+            >清空内容
+          </el-button>
           <el-button type="primary" @click="getHtml" class="htmlbtn"
             >复制HTML
           </el-button>
@@ -122,24 +125,15 @@ export default {
         localStorage.setItem("md", this.editor.getMarkdown());
       }
     },
-    getLocalSize() {
-      console.log(window.localStorage)
-      if (!window.localStorage) {
-        console.log("浏览器不支持localStorage");
-      }
-      var size = 0;
-      for (item in window.localStorage) {
-        if (window.localStorage.hasOwnProperty(item)) {
-          size += window.localStorage.getItem(item).length;
-        }
-      }
-      console.log(
-        "当前localStorage剩余容量为" + (size / 1024).toFixed(2) + "KB"
-      );
+    resetInnter() {
+      this.editor.reset();
+      this.$message({
+        message: "清空成功",
+        type: "success",
+      });
     },
   },
   created() {
-    this.getLocalSize();
     if (window.localStorage && localStorage.getItem("md")) {
       this.initTxt = localStorage.getItem("md");
     }
@@ -158,7 +152,8 @@ export default {
       useCommandShortcut: true,
       useDefaultHTMLSanitizer: true,
       usageStatistics: false,
-      hideModeSwitch: false,
+      hideModeSwitch: true,
+      previewHighlight:false,
       viewer: true,
       events: {
         change: this.useChange,
@@ -241,9 +236,5 @@ export default {
 ::v-deep te-toolbar-section {
   position: fixed;
   top: 0;
-}
-
-::v-deep .tui-editor-defaultUI .te-mode-switch-section {
-  display: none !important;
 }
 </style>
