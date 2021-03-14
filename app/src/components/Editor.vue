@@ -69,6 +69,8 @@ export default {
       functionList: [
         "页面简约",
         "功能实用",
+        "本地实时保存",
+        "一键清空内容",
         "支持稀土掘金、CSDN、微信公众号、知乎",
         "可复制HTML、MarkDown",
         "可下载MarkDown文件",
