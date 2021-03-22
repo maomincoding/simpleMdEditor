@@ -240,4 +240,8 @@ export default {
   position: fixed;
   top: 0;
 }
+
+::v-deep .tui-editor-contents .task-list-item::before{
+  top:7px;
+}
 </style>
